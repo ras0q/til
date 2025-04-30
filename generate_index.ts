@@ -15,6 +15,10 @@ const content = `# Today I Learned (TIL)
 
 ## Index (${tilEntries.length} entries, Newest first)
 
-${tilEntries.map((e) => `- [${e.path}](./${e.path})`)}`;
+${
+  tilEntries
+    .map((e) => `- [${e.path}](./${e.path})`)
+    .join("\n")
+}`;
 
 console.log(content);
