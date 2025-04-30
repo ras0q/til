@@ -9,7 +9,7 @@ const glob = [
 
 const tilEntries = (await Array.fromAsync(walk(".", { match: glob })))
   .filter((e) => e.isDirectory)
-  .toSorted((a, b) => a.name === b.name ? 0 : a.name > b.name ? 1 : -1);
+  .toSorted((a, b) => a.name === b.name ? 0 : a.name < b.name ? 1 : -1);
 
 const content = `# Today I Learned (TIL)
 
