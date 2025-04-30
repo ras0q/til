@@ -13,7 +13,7 @@ const tilEntries = (await Array.fromAsync(walk(".", { match: glob })))
 
 const content = `# Today I Learned (TIL)
 
-## Index (${tilEntries.length} entries, Newest first)
+## Index (${tilEntries.length} entries, newest first)
 
 ${
   tilEntries
