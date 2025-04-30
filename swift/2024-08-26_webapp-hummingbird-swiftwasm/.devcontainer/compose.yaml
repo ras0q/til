@@ -1,0 +1,39 @@
+services:
+  development:
+    depends_on:
+      mysql:
+        condition: service_healthy
+    build:
+      context: ./development
+      dockerfile: Dockerfile
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD: password
+      MYSQL_DATABASE: world
+    ports:
+      - "8080:8080"
+    volumes:
+      - ..:/workspaces:cached
+    working_dir: /workspaces
+    command: sleep infinity
+
+  mysql:
+    build:
+      context: ./mysql
+      dockerfile: Dockerfile
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: swift_webapp
+    expose:
+      - "3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: "mysqladmin ping -h 127.0.0.1 -u root -p$$MYSQL_ROOT_PASSWORD"
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  mysql-data:

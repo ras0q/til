@@ -1,0 +1,13 @@
+syntax = "proto3";
+package ready;
+
+import "google/protobuf/empty.proto";
+
+service ReadyService {
+  rpc Ready(google.protobuf.Empty) returns (ReadyResponse) {}
+  rpc Unready(google.protobuf.Empty) returns (ReadyResponse) {}
+}
+
+message ReadyResponse {
+  bool ready = 1;
+}

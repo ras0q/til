@@ -1,0 +1,5 @@
+{
+  "replace": {
+    "caller/impl/impl.go": "caller/mock/mock.go"
+  }
+}
