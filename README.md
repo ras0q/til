@@ -1,7 +1,8 @@
 # Today I Learned (TIL)
 
-## Index (7 entries, newest first)
+## Index (8 entries, newest first)
 
+- [cpp/2025-06-12_vcpkg](./cpp/2025-06-12_vcpkg)
 - [python/2025-05-29_pymupdf](./python/2025-05-29_pymupdf)
 - [python/2025-04-30_marimo](./python/2025-04-30_marimo)
 - [nostr/2024-09-04_nostr-vuejs](./nostr/2024-09-04_nostr-vuejs)
