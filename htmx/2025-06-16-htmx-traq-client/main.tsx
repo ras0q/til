@@ -43,6 +43,9 @@ const Layout: FC = (props) => {
   return (
     <html>
       <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>traQ Viewer</title>
         <script
           src="https://unpkg.com/htmx.org@2.0.4/dist/htmx.min.js"
           integrity="sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+"
@@ -277,16 +280,19 @@ app.get("/api/channels/:path{.+}/stream", async (c) => {
   let lastMessage: components["schemas"]["Message"] | null = null;
   return streamSSE(c, async (stream) => {
     while (true) {
+      const order = "asc";
+      const limit = 200;
+      const since = lastMessage
+        ? lastMessage.createdAt
+        : new Date(new Date().getTime() - 3 * 60 * 60 * 1000) // 3 hours ago
+          .toISOString();
+
       const { data: messages, error: getMessagesError } = await apiClient.GET(
         "/channels/{channelId}/messages",
         {
           params: {
             path: { channelId: channel.id },
-            query: {
-              order: "asc",
-              limit: 5,
-              since: lastMessage ? lastMessage.createdAt : undefined,
-            },
+            query: { order, limit, since },
           },
         },
       );
