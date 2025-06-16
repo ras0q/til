@@ -15,4 +15,4 @@ RUN deno cache main.tsx && deno task patch
 EXPOSE 8000
 
 # Run the app
-CMD ["/app/main.tsx"]
+ENTRYPOINT ["/app/main.tsx"]
