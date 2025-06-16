@@ -2,7 +2,8 @@
   "nodeModulesDir": "auto",
   "tasks": {
     "dev": "deno serve --watch --allow-net --allow-env main.tsx",
-    "generate:schema": "deno run -A npm:openapi-typescript https://raw.githubusercontent.com/traPtitech/traQ/refs/heads/master/docs/v3-api.yaml -o schema.d.ts"
+    "generate:schema": "deno run -A npm:openapi-typescript https://raw.githubusercontent.com/traPtitech/traQ/refs/heads/master/docs/v3-api.yaml -o schema.d.ts",
+    "patch": "patch ./node_modules/.deno/@traptitech+markdown-it-regexp@0.5.3/node_modules/@traptitech/markdown-it-regexp/lib/index.js ./patches/@traptitech+markdown-it-regexp+0.5.3.patch"
   },
   "imports": {
     "@hono/auth-js": "npm:@hono/auth-js@^1.0.17",
@@ -15,10 +16,4 @@
     "jsx": "precompile",
     "jsxImportSource": "hono/jsx"
   },
-  // TODO: fix this
-  "scopes": {
-    "npm:@traptitech/traq-markdown-it@6.3.0": {
-      "npm:@traptitech/markdown-it-regexp@0.5.3": "./patches/markdown-it-regexp.js"
-    }
-  }
 }

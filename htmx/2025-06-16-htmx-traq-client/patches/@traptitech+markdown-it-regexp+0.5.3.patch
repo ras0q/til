@@ -1,0 +1,125 @@
+diff --git a/node_modules/@traptitech/markdown-it-regexp/lib/index.js b/node_modules/@traptitech/markdown-it-regexp/lib/index.js
+index fa6b979..f9d2e7e 100644
+--- a/node_modules/.deno/@traptitech+markdown-it-regexp@0.5.3/node_modules/@traptitech/markdown-it-regexp/lib/index.js
++++ b/node_modules/.deno/@traptitech/markdown-it-regexp@0.5.3/node_modules/@traptitech/markdown-it-regexp/lib/index.js
+@@ -5,80 +5,46 @@
+  */
+
+ /**
+- * Counter for multi usage.
++ * @param {RegExp} regexp - Regular expression to match
++ * @param {(match: RegExpMatchArray) => string} replacer - Function to replace matched text
++ * @returns {(md: MarkdownIt) => void} - Returns a new plugin instance
+  */
+-var counter = 0
+-
+-/**
+- * Expose `Plugin`
+- */
+-
+-module.exports = Plugin
+-
+-/**
+- * Constructor function
+- */
+-
+-function Plugin(regexp, replacer) {
+-  // return value should be a callable function
+-  // with strictly defined options passed by markdown-it
+-  var self = function (md, options) {
+-    self.options = options
+-    self.init(md)
++module.exports = function RegexpPlugin(regexp, replacer) {
++  let counter = 0;
++
++  return function (md) {
++    const flags = (regexp.global     ? 'g' : '')
++                + (regexp.multiline  ? 'm' : '')
++                + (regexp.ignoreCase ? 'i' : '')
++    const parsedRegexp = RegExp('^' + regexp.source, flags)
++    const id = 'regexp-' + counter++
++
++    md.inline.ruler.push(id, (state, silent) => {
++      // slowwww... maybe use an advanced regexp engine for this
++      const match = parsedRegexp.exec(state.src.slice(state.pos))
++      if (!match) return false
++
++      if (state.pending) {
++        state.pushPending();
++      }
++
++      // valid match found, now we need to advance cursor
++      const oldPos = state.pos
++      state.pos += match[0].length
++
++      // don't insert any tokens in silent mode
++      if (silent) return true
++
++      const token = state.push(id, '', 0)
++      token.meta = { match: match }
++      token.position = oldPos
++      token.size = match[0].length
++
++      return true
++    })
++
++    md.renderer.rules[id] = (tokens, idx, _options, _env) => {
++      return replacer(tokens[idx].meta.match)
++    }
+   }
+-
+-  // initialize plugin object
+-  self.__proto__ = Plugin.prototype
+-
+-  // clone regexp with all the flags
+-  var flags = (regexp.global     ? 'g' : '')
+-            + (regexp.multiline  ? 'm' : '')
+-            + (regexp.ignoreCase ? 'i' : '')
+-
+-  self.regexp = RegExp('^' + regexp.source, flags)
+-
+-  // copy init options
+-  self.replacer = replacer
+-
+-  // this plugin can be inserted multiple times,
+-  // so we're generating unique name for it
+-  self.id = 'regexp-' + counter
+-  counter++
+-
+-  return self
+-}
+-
+-// function that registers plugin with markdown-it
+-Plugin.prototype.init = function (md) {
+-  md.inline.ruler.push(this.id, this.parse.bind(this))
+-
+-  md.renderer.rules[this.id] = this.render.bind(this)
+-}
+-
+-Plugin.prototype.parse = function (state, silent) {
+-  // slowwww... maybe use an advanced regexp engine for this
+-  var match = this.regexp.exec(state.src.slice(state.pos))
+-  if (!match) return false
+-
+-  if (state.pending) {
+-    state.pushPending();
+-  }
+-
+-  // valid match found, now we need to advance cursor
+-  var oldPos = state.pos
+-  state.pos += match[0].length
+-
+-  // don't insert any tokens in silent mode
+-  if (silent) return true
+-
+-  var token = state.push(this.id, '', 0)
+-  token.meta = { match: match }
+-  token.position = oldPos
+-  token.size = match[0].length
+-
+-  return true
+-}
+-
+-Plugin.prototype.render = function (tokens, id, options, env) {
+-  return this.replacer(tokens[id].meta.match)
+ }
