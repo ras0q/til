@@ -100,6 +100,21 @@ const MessageComponent: FC<
           class="message-content"
           dangerouslySetInnerHTML={{ __html: markdownContent }}
         />
+        {message.stamps.length > 0 && (
+          <div>
+            {message.stamps.map((stamp) => (
+              <img
+                key={stamp.name }
+                src={`${apiBaseURL}/public/stamp/${stamp.name}`}
+                alt={stamp.name}
+                title={stamp.name}
+                width="32"
+                height="32"
+                loading="lazy"
+              />
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
