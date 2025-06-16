@@ -1,7 +1,8 @@
 # Today I Learned (TIL)
 
-## Index (8 entries, newest first)
+## Index (9 entries, newest first)
 
+- [htmx/2025-06-16_htmx-traq-client](./htmx/2025-06-16_htmx-traq-client)
 - [cpp/2025-06-12_vcpkg](./cpp/2025-06-12_vcpkg)
 - [python/2025-05-29_pymupdf](./python/2025-05-29_pymupdf)
 - [python/2025-04-30_marimo](./python/2025-04-30_marimo)
