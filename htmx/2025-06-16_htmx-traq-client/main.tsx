@@ -104,10 +104,10 @@ const MessageComponent: FC<
           <div>
             {message.stamps.map((stamp) => (
               <img
-                key={stamp.name }
-                src={`${apiBaseURL}/public/stamp/${stamp.name}`}
-                alt={stamp.name}
-                title={stamp.name}
+                key={stamp.stampId}
+                src={`${apiBaseURL}/public/icons/traP`}
+                alt="TODO: fill stamp name"
+                title="traQ"
                 width="32"
                 height="32"
                 loading="lazy"
