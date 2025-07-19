@@ -1,4 +1,4 @@
-package main
+package asmuthbloom
 
 import (
 	"fmt"
@@ -6,67 +6,18 @@ import (
 	"sort"
 )
 
-func main() {
-	secret := 42
-	a := asmuthBloom{
-		secretMod: 43,
-		threshold: 3,
-		mods:      []int{101, 103, 107, 109, 113},
-	}
-	if err := runAsmuthBloom(a, secret); err != nil {
-		panic(err)
-	}
-}
-
-func runAsmuthBloom(a asmuthBloom, secret int) error {
-	fmt.Printf("config: %+v\n", a)
-	fmt.Println("secret:", secret)
-
-	shares, err := a.generateShares(secret)
-	if err != nil {
-		return fmt.Errorf("generateShares: %w", err)
-	}
-	fmt.Printf("shares: %+v\n", shares)
-
-	sufficientShares := make([]share, a.threshold)
-	for i := range a.threshold {
-		sufficientShares[i] = shares[i]
-	}
-	fmt.Println("sufficientShares:", sufficientShares)
-
-	reconstructedSecret, err := a.reconstructSecret(sufficientShares)
-	if err != nil {
-		return fmt.Errorf("reconstructSecret: %w", err)
-	}
-	fmt.Println("reconstructedSecret:", reconstructedSecret)
-
-	insufficientShares := make([]share, a.threshold-1)
-	for i := range insufficientShares {
-		insufficientShares[i] = shares[len(shares)-1-i]
-	}
-	fmt.Println("insufficientShares:", insufficientShares)
-
-	reconstructedSecret2, err := a.reconstructSecret(insufficientShares)
-	if err != nil {
-		return fmt.Errorf("reconstructSecret: %w", err)
-	}
-	fmt.Println("reconstructedSecret2:", reconstructedSecret2)
-
-	return nil
-}
-
-type share struct {
+type Share struct {
 	mod   int
 	value int
 }
 
-type asmuthBloom struct {
+type Config struct {
 	secretMod int
 	threshold int
 	mods      []int
 }
 
-func (a asmuthBloom) generateShares(secret int) ([]share, error) {
+func (a Config) generateShares(secret int) ([]Share, error) {
 	if a.threshold < 1 || a.threshold > len(a.mods) {
 		return nil, fmt.Errorf("threshold is out of range")
 	}
@@ -111,9 +62,9 @@ func (a asmuthBloom) generateShares(secret int) ([]share, error) {
 	r := rand.IntN(maxRand)
 	encodedSecret := secret + r*a.secretMod
 
-	shares := make([]share, len(a.mods))
+	shares := make([]Share, len(a.mods))
 	for i := range a.mods {
-		shares[i] = share{
+		shares[i] = Share{
 			mod:   a.mods[i],
 			value: encodedSecret % a.mods[i],
 		}
@@ -122,7 +73,7 @@ func (a asmuthBloom) generateShares(secret int) ([]share, error) {
 	return shares, nil
 }
 
-func (a asmuthBloom) reconstructSecret(shares []share) (int, error) {
+func (a Config) reconstructSecret(shares []Share) (int, error) {
 	// if len(shares) < a.threshold {
 	// 	return 0, fmt.Errorf("shares are not enough")
 	// }
