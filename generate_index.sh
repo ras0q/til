@@ -19,5 +19,5 @@ while IFS= read -r entry; do
   printf -- '- [%s](./%s)\n' "$entry_name" "$entry_name"
 done < /tmp/index_dirs.tmp
 
-# rm -f /tmp/index_dirs_with_date.tmp /tmp/index_dirs.tmp
+rm -f /tmp/index_dirs_with_date.tmp /tmp/index_dirs.tmp
 
