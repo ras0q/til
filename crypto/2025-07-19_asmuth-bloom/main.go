@@ -9,9 +9,9 @@ import (
 func main() {
 	secret := 42
 	a := asmuthBloom{
-		secretMaxRange: 43,
-		threshold:      3,
-		mods:           []int{101, 103, 107, 109, 113},
+		secretMod: 43,
+		threshold: 3,
+		mods:      []int{101, 103, 107, 109, 113},
 	}
 	if err := runAsmuthBloom(a, secret); err != nil {
 		panic(err)
@@ -28,25 +28,25 @@ func runAsmuthBloom(a asmuthBloom, secret int) error {
 	}
 	fmt.Printf("shares: %+v\n", shares)
 
-	reconstructableParty := make([]share, a.threshold)
+	sufficientShares := make([]share, a.threshold)
 	for i := range a.threshold {
-		reconstructableParty[i] = shares[i]
+		sufficientShares[i] = shares[i]
 	}
-	fmt.Println("reconstructableParty:", reconstructableParty)
+	fmt.Println("sufficientShares:", sufficientShares)
 
-	reconstructedSecret, err := a.reconstructSecret(reconstructableParty)
+	reconstructedSecret, err := a.reconstructSecret(sufficientShares)
 	if err != nil {
 		return fmt.Errorf("reconstructSecret: %w", err)
 	}
 	fmt.Println("reconstructedSecret:", reconstructedSecret)
 
-	unreconstructableParty := make([]share, a.threshold-1)
-	for i := range unreconstructableParty {
-		unreconstructableParty[i] = shares[len(shares)-1-i]
+	insufficientShares := make([]share, a.threshold-1)
+	for i := range insufficientShares {
+		insufficientShares[i] = shares[len(shares)-1-i]
 	}
-	fmt.Println("unreconstructableParty:", unreconstructableParty)
+	fmt.Println("insufficientShares:", insufficientShares)
 
-	reconstructedSecret2, err := a.reconstructSecret(unreconstructableParty)
+	reconstructedSecret2, err := a.reconstructSecret(insufficientShares)
 	if err != nil {
 		return fmt.Errorf("reconstructSecret: %w", err)
 	}
@@ -61,9 +61,9 @@ type share struct {
 }
 
 type asmuthBloom struct {
-	secretMaxRange int
-	threshold      int
-	mods           []int
+	secretMod int
+	threshold int
+	mods      []int
 }
 
 func (a asmuthBloom) generateShares(secret int) ([]share, error) {
@@ -87,35 +87,35 @@ func (a asmuthBloom) generateShares(secret int) ([]share, error) {
 		}
 	}
 
-	if a.secretMaxRange < 1 || a.secretMaxRange >= a.mods[0] {
+	if a.secretMod < 1 || a.secretMod >= a.mods[0] {
 		return nil, fmt.Errorf("secretMaxRange is out of range")
 	}
 
-	if secret < 1 || secret >= a.secretMaxRange {
+	if secret < 1 || secret >= a.secretMod {
 		return nil, fmt.Errorf("secret is out of range")
 	}
 
-	maxUnreconstructableParty := 1
+	securityProduct := 1
 	for i := range a.threshold - 1 {
-		maxUnreconstructableParty *= a.mods[len(a.mods)-1-i]
+		securityProduct *= a.mods[len(a.mods)-1-i]
 	}
-	minReconstructableParty := 1
+	encodedSecretUpperBound := 1
 	for i := range a.threshold {
-		minReconstructableParty *= a.mods[i]
+		encodedSecretUpperBound *= a.mods[i]
 	}
-	if a.secretMaxRange*maxUnreconstructableParty >= minReconstructableParty {
-		return nil, fmt.Errorf("mods are not valid: %d * %d >= %d", a.secretMaxRange, maxUnreconstructableParty, minReconstructableParty)
+	if a.secretMod*securityProduct >= encodedSecretUpperBound {
+		return nil, fmt.Errorf("mods are not valid: %d * %d >= %d", a.secretMod, securityProduct, encodedSecretUpperBound)
 	}
 
-	maxRand := (minReconstructableParty - secret) / a.secretMaxRange
+	maxRand := (encodedSecretUpperBound - secret) / a.secretMod
 	r := rand.IntN(maxRand)
-	y := secret + r*a.secretMaxRange
+	encodedSecret := secret + r*a.secretMod
 
 	shares := make([]share, len(a.mods))
 	for i := range a.mods {
 		shares[i] = share{
 			mod:   a.mods[i],
-			value: y % a.mods[i],
+			value: encodedSecret % a.mods[i],
 		}
 	}
 
@@ -141,7 +141,7 @@ func (a asmuthBloom) reconstructSecret(shares []share) (int, error) {
 		return 0, fmt.Errorf("chineseRemainderTheorem: %w", err)
 	}
 
-	reconstuctedSecret %= a.secretMaxRange
+	reconstuctedSecret %= a.secretMod
 
 	return reconstuctedSecret, nil
 }
