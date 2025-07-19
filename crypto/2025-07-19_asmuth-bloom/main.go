@@ -40,6 +40,18 @@ func runAsmuthBloom(a asmuthBloom, secret int) error {
 	}
 	fmt.Println("reconstructedSecret:", reconstructedSecret)
 
+	unreconstructableParty := make([]share, a.threshold-1)
+	for i := range unreconstructableParty {
+		unreconstructableParty[i] = shares[len(shares)-1-i]
+	}
+	fmt.Println("unreconstructableParty:", unreconstructableParty)
+
+	reconstructedSecret2, err := a.reconstructSecret(unreconstructableParty)
+	if err != nil {
+		return fmt.Errorf("reconstructSecret: %w", err)
+	}
+	fmt.Println("reconstructedSecret2:", reconstructedSecret2)
+
 	return nil
 }
 
@@ -83,26 +95,27 @@ func (a asmuthBloom) generateShares(secret int) ([]share, error) {
 		return nil, fmt.Errorf("secret is out of range")
 	}
 
-	maxReconstructableParty := 1
+	maxUnreconstructableParty := 1
 	for i := range a.threshold - 1 {
-		maxReconstructableParty *= a.mods[len(a.mods)-1-i]
+		maxUnreconstructableParty *= a.mods[len(a.mods)-1-i]
 	}
 	minReconstructableParty := 1
 	for i := range a.threshold {
 		minReconstructableParty *= a.mods[i]
 	}
-	if a.secretMaxRange*maxReconstructableParty >= minReconstructableParty {
-		return nil, fmt.Errorf("mods are not valid: %d * %d >= %d", a.secretMaxRange, maxReconstructableParty, minReconstructableParty)
+	if a.secretMaxRange*maxUnreconstructableParty >= minReconstructableParty {
+		return nil, fmt.Errorf("mods are not valid: %d * %d >= %d", a.secretMaxRange, maxUnreconstructableParty, minReconstructableParty)
 	}
 
-	r := rand.IntN(a.secretMaxRange)
+	maxRand := (minReconstructableParty - secret) / a.secretMaxRange
+	r := rand.IntN(maxRand)
 	y := secret + r*a.secretMaxRange
 
 	shares := make([]share, len(a.mods))
 	for i := range a.mods {
 		shares[i] = share{
 			mod:   a.mods[i],
-			value: (y + r*a.mods[i]) % a.mods[i],
+			value: y % a.mods[i],
 		}
 	}
 
@@ -110,9 +123,9 @@ func (a asmuthBloom) generateShares(secret int) ([]share, error) {
 }
 
 func (a asmuthBloom) reconstructSecret(shares []share) (int, error) {
-	if len(shares) < a.threshold {
-		return 0, fmt.Errorf("shares are not enough")
-	}
+	// if len(shares) < a.threshold {
+	// 	return 0, fmt.Errorf("shares are not enough")
+	// }
 
 	values := make([]int, len(shares))
 	for i := range shares {
