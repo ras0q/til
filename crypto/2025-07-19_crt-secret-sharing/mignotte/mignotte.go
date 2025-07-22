@@ -37,25 +37,17 @@ func (a Config) generateShares(secret int) ([]Share, error) {
 		}
 	}
 
-	allModsProduct := 1
-	for i := range a.mods {
-		allModsProduct *= a.mods[i]
-	}
-	if secret < 1 || secret >= allModsProduct {
-		return nil, fmt.Errorf("secret is out of range")
-	}
-
-	secretLowerBound := 1
-	for i := range a.threshold - 1 {
-		secretLowerBound *= a.mods[len(a.mods)-1-i]
-	}
-	secretUpperBound := 1
-	for i := range a.threshold {
-		secretUpperBound *= a.mods[i]
-	}
-	if secretLowerBound >= secret || secret >= secretUpperBound {
-		return nil, fmt.Errorf("mods are not valid: %d >= %d or %d >= %d", secretLowerBound, secret, secret, secretUpperBound)
-	}
+	// secretLowerBound := 1
+	// for i := range a.threshold - 1 {
+	// 	secretLowerBound *= a.mods[len(a.mods)-1-i]
+	// }
+	// secretUpperBound := 1
+	// for i := range a.threshold {
+	// 	secretUpperBound *= a.mods[i]
+	// }
+	// if secretLowerBound >= secret || secret >= secretUpperBound {
+	// 	return nil, fmt.Errorf("mods are not valid: %d >= %d or %d >= %d", secretLowerBound, secret, secret, secretUpperBound)
+	// }
 
 	shares := make([]Share, len(a.mods))
 	for i := range a.mods {
