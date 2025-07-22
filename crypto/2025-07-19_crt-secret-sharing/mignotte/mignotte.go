@@ -1,9 +1,8 @@
-package asmuth_bloom
+package mignotte
 
 import (
 	"crt_secret_sharing/crt"
 	"fmt"
-	"math/rand/v2"
 	"sort"
 )
 
@@ -13,7 +12,6 @@ type Share struct {
 }
 
 type Config struct {
-	secretMod int
 	threshold int
 	mods      []int
 }
@@ -39,11 +37,11 @@ func (a Config) generateShares(secret int) ([]Share, error) {
 		}
 	}
 
-	if a.secretMod < 1 || a.secretMod >= a.mods[0] {
-		return nil, fmt.Errorf("secretMaxRange is out of range")
+	allModsProduct := 1
+	for i := range a.mods {
+		allModsProduct *= a.mods[i]
 	}
-
-	if secret < 1 || secret >= a.secretMod {
+	if secret < 1 || secret >= allModsProduct {
 		return nil, fmt.Errorf("secret is out of range")
 	}
 
@@ -55,20 +53,15 @@ func (a Config) generateShares(secret int) ([]Share, error) {
 	for i := range a.threshold {
 		encodedSecretUpperBound *= a.mods[i]
 	}
-	if a.secretMod*securityProduct >= encodedSecretUpperBound {
-		return nil, fmt.Errorf("mods are not valid: %d * %d >= %d", a.secretMod, securityProduct, encodedSecretUpperBound)
+	if securityProduct >= secret || secret >= encodedSecretUpperBound {
+		return nil, fmt.Errorf("mods are not valid: %d >= %d or %d >= %d", securityProduct, secret, secret, encodedSecretUpperBound)
 	}
-
-	// Mignotteと異なり、乱数を使う
-	maxRand := (encodedSecretUpperBound - secret) / a.secretMod
-	r := rand.IntN(maxRand)
-	encodedSecret := secret + r*a.secretMod
 
 	shares := make([]Share, len(a.mods))
 	for i := range a.mods {
 		shares[i] = Share{
 			mod:   a.mods[i],
-			value: encodedSecret % a.mods[i],
+			value: secret % a.mods[i],
 		}
 	}
 
@@ -94,7 +87,12 @@ func (a Config) reconstructSecret(shares []Share) (int, error) {
 		return 0, fmt.Errorf("chineseRemainderTheorem: %w", err)
 	}
 
-	reconstuctedSecret %= a.secretMod
+	allModsProduct := 1
+	for i := range a.mods {
+		allModsProduct *= a.mods[i]
+	}
+
+	reconstuctedSecret %= allModsProduct
 
 	return reconstuctedSecret, nil
 }

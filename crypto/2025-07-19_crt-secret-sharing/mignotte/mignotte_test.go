@@ -1,11 +1,10 @@
-package asmuth_bloom
+package mignotte
 
 import (
 	"testing"
 )
 
-// follow https://github.com/gotestyourself/gotest.tools/wiki/Go-Testing-Patterns
-func Test_AsmuthBloom(t *testing.T) {
+func Test_Mignotte(t *testing.T) {
 	type testCase struct {
 		config       Config
 		secret       int
@@ -23,7 +22,10 @@ func Test_AsmuthBloom(t *testing.T) {
 		chosenShares := tc.chooseShares(shares)
 		reconstructedSecret, err := tc.config.reconstructSecret(chosenShares)
 		if err != nil {
-			t.Fatalf("reconstructSecret: %v", err)
+			if !tc.shouldFail {
+				t.Fatalf("reconstructSecret: %v", err)
+			}
+			return
 		}
 
 		reconstructedSuccessfully := tc.secret == reconstructedSecret
@@ -38,22 +40,20 @@ func Test_AsmuthBloom(t *testing.T) {
 	testCases := map[string]testCase{
 		"has enough shares": {
 			config: Config{
-				secretMod: 43,
 				threshold: 3,
 				mods:      []int{101, 103, 107, 109, 113},
 			},
-			secret: 42,
+			secret: 13000, // 上からthreshold-1個のmodの積より大きい値でないといけない
 			chooseShares: func(shares []Share) []Share {
 				return shares[:3]
 			},
 		},
 		"has insufficient shares": {
 			config: Config{
-				secretMod: 43,
 				threshold: 3,
 				mods:      []int{101, 103, 107, 109, 113},
 			},
-			secret: 42,
+			secret: 13000,
 			chooseShares: func(shares []Share) []Share {
 				return shares[3:5]
 			},
@@ -61,11 +61,10 @@ func Test_AsmuthBloom(t *testing.T) {
 		},
 		"has unknown shares": {
 			config: Config{
-				secretMod: 43,
 				threshold: 3,
 				mods:      []int{101, 103, 107, 109, 113},
 			},
-			secret: 42,
+			secret: 13000,
 			chooseShares: func(shares []Share) []Share {
 				return []Share{
 					shares[0],
