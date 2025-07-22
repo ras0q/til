@@ -9,7 +9,7 @@ func Test_AsmuthBloom(t *testing.T) {
 	type testCase struct {
 		config       Config
 		secret       int
-		shareIndices []int
+		chooseShares func(shares []Share) []Share
 		shouldFail   bool
 	}
 
@@ -20,11 +20,7 @@ func Test_AsmuthBloom(t *testing.T) {
 		}
 		t.Logf("shares: %+v", shares)
 
-		chosenShares := make([]Share, len(tc.shareIndices))
-		for i, index := range tc.shareIndices {
-			chosenShares[i] = shares[index]
-		}
-
+		chosenShares := tc.chooseShares(shares)
 		reconstructedSecret, err := tc.config.reconstructSecret(chosenShares)
 		if err != nil {
 			t.Fatalf("reconstructSecret: %v", err)
@@ -46,8 +42,10 @@ func Test_AsmuthBloom(t *testing.T) {
 				threshold: 3,
 				mods:      []int{101, 103, 107, 109, 113},
 			},
-			secret:       42,
-			shareIndices: []int{0, 1, 2},
+			secret: 42,
+			chooseShares: func(shares []Share) []Share {
+				return shares
+			},
 		},
 		"has insufficient shares": {
 			config: Config{
@@ -55,9 +53,30 @@ func Test_AsmuthBloom(t *testing.T) {
 				threshold: 3,
 				mods:      []int{101, 103, 107, 109, 113},
 			},
-			secret:       42,
-			shareIndices: []int{3, 4},
-			shouldFail:   true,
+			secret: 42,
+			chooseShares: func(shares []Share) []Share {
+				return shares[3:5]
+			},
+			shouldFail: true,
+		},
+		"has unknown shares": {
+			config: Config{
+				secretMod: 43,
+				threshold: 3,
+				mods:      []int{101, 103, 107, 109, 113},
+			},
+			secret: 42,
+			chooseShares: func(shares []Share) []Share {
+				return []Share{
+					shares[0],
+					shares[1],
+					{
+						mod:   shares[2].mod,
+						value: shares[2].value * 2,
+					},
+				}
+			},
+			shouldFail: true,
 		},
 	}
 
