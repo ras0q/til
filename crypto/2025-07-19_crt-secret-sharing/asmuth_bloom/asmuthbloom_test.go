@@ -1,4 +1,4 @@
-package asmuthbloom
+package asmuth_bloom
 
 import (
 	"testing"
