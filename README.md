@@ -2,7 +2,7 @@
 
 ## Index (11 entries, newest first)
 
-- [crypto/2025-07-19_asmuth-bloom](./crypto/2025-07-19_asmuth-bloom)
+- [crypto/2025-07-19_crt-secret-sharing](./crypto/2025-07-19_crt-secret-sharing)
 - [javascript/2025-07-05_mastra](./javascript/2025-07-05_mastra)
 - [htmx/2025-06-16_htmx-traq-client](./htmx/2025-06-16_htmx-traq-client)
 - [cpp/2025-06-12_vcpkg](./cpp/2025-06-12_vcpkg)
