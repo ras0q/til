@@ -1,6 +1,6 @@
 # Today I Learned (TIL)
 
-## Index (11 entries, newest first)
+## Index (12 entries, newest first)
 
 - [crypto/2025-07-19_crt-secret-sharing](./crypto/2025-07-19_crt-secret-sharing)
 - [javascript/2025-07-05_mastra](./javascript/2025-07-05_mastra)
@@ -8,6 +8,7 @@
 - [cpp/2025-06-12_vcpkg](./cpp/2025-06-12_vcpkg)
 - [python/2025-05-29_pymupdf](./python/2025-05-29_pymupdf)
 - [python/2025-04-30_marimo](./python/2025-04-30_marimo)
+- [jsx/2025-04-11_myjsx](./jsx/2025-04-11_myjsx)
 - [nostr/2024-09-04_nostr-vuejs](./nostr/2024-09-04_nostr-vuejs)
 - [swift/2024-08-26_webapp-hummingbird-swiftwasm](./swift/2024-08-26_webapp-hummingbird-swiftwasm)
 - [quarto/2024-01-31_quarto-rye](./quarto/2024-01-31_quarto-rye)
