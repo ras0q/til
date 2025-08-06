@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "./jsx"
+  },
+  "unstable": [
+    // HACK: for jsx imports
+    "sloppy-imports"
+  ],
+  "imports": {
+    "@deno/emit": "jsr:@deno/emit@^0.46.0"
+  }
+}
