@@ -1,0 +1,20 @@
+{
+  "name": "2025-08-19_claude-code-api",
+  "version": "0.1.0",
+  "exports": "./mod.ts",
+  "tasks": {
+    "dev": "deno test --watch",
+    "genapi": "openapi-typescript -o openai.d.ts https://app.stainless.com/api/spec/documented/openai/openapi.documented.yml",
+    "bundle": "esbuild --metafile=meta.json --outfile=mod.min.js --bundle --minify mod.ts"
+  },
+  "license": "MIT",
+  "imports": {
+    "esbuild": "npm:esbuild@^0.25.9",
+    "hono": "npm:hono@^4.9.2",
+    "openapi-ts-router": "npm:openapi-ts-router@^0.3.4",
+    "openapi-typescript": "npm:openapi-typescript@^7.9.1",
+    "valibot": "npm:valibot@^1.1.0",
+    "validation-adapters": "npm:validation-adapters@^0.0.34"
+  },
+  "nodeModulesDir": "auto"
+}
