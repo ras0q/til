@@ -1,2 +1,4 @@
 exclude:
-  - "vcpkg"
+  - "*"
+include:
+  - "**/*.md"
