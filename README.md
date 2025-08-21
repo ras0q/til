@@ -1,7 +1,8 @@
 # Today I Learned (TIL)
 
-## Index (13 entries, newest first)
+## Index (14 entries, newest first)
 
+- [crypto/2025-08-21_beaver-triples](./crypto/2025-08-21_beaver-triples)
 - [javascript/2025-08-19_claude-code-api](./javascript/2025-08-19_claude-code-api)
 - [crypto/2025-07-19_crt-secret-sharing](./crypto/2025-07-19_crt-secret-sharing)
 - [javascript/2025-07-05_mastra](./javascript/2025-07-05_mastra)
