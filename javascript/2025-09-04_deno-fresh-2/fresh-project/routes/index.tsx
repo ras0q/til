@@ -6,6 +6,7 @@ import Counter from "../islands/Counter.tsx";
 export default define.page(function Home(ctx) {
   const count = useSignal(3);
 
+  console.log("Config " + JSON.stringify(ctx.config));
   console.log("Shared value " + ctx.state.shared);
 
   return (
