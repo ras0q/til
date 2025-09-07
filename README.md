@@ -1,7 +1,8 @@
 # Today I Learned (TIL)
 
-## Index (15 entries, newest first)
+## Index (16 entries, newest first)
 
+- [webgl/2025-09-07_wgldorg](./webgl/2025-09-07_wgldorg)
 - [javascript/2025-09-04_deno-fresh-2](./javascript/2025-09-04_deno-fresh-2)
 - [crypto/2025-08-21_beaver-triples](./crypto/2025-08-21_beaver-triples)
 - [javascript/2025-08-19_claude-code-api](./javascript/2025-08-19_claude-code-api)
