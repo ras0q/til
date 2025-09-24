@@ -2,14 +2,14 @@
 
 ## Index (17 entries, newest first)
 
-- [javascript/2025-09-09_sveltekit-on-deno](./javascript/2025-09-09_sveltekit-on-deno)
+- [web/2025-09-09_sveltekit-on-deno](./web/2025-09-09_sveltekit-on-deno)
 - [webgl/2025-09-07_wgldorg](./webgl/2025-09-07_wgldorg)
-- [javascript/2025-09-04_deno-fresh-2](./javascript/2025-09-04_deno-fresh-2)
+- [web/2025-09-04_deno-fresh-2](./web/2025-09-04_deno-fresh-2)
 - [crypto/2025-08-21_beaver-triples](./crypto/2025-08-21_beaver-triples)
 - [javascript/2025-08-19_claude-code-api](./javascript/2025-08-19_claude-code-api)
 - [crypto/2025-07-19_crt-secret-sharing](./crypto/2025-07-19_crt-secret-sharing)
 - [javascript/2025-07-05_mastra](./javascript/2025-07-05_mastra)
-- [htmx/2025-06-16_htmx-traq-client](./htmx/2025-06-16_htmx-traq-client)
+- [web/2025-06-16_htmx-traq-client](./web/2025-06-16_htmx-traq-client)
 - [cpp/2025-06-12_vcpkg](./cpp/2025-06-12_vcpkg)
 - [python/2025-05-29_pymupdf](./python/2025-05-29_pymupdf)
 - [python/2025-04-30_marimo](./python/2025-04-30_marimo)
