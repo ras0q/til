@@ -7,3 +7,9 @@ export interface State {
 }
 
 export const define = createDefine<State>();
+
+export async function loadContent(id: string) {
+  await new Promise((resolve) => setTimeout(() => resolve(0), 100));
+
+  return `Hello, ${id}!`;
+}

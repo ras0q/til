@@ -36,6 +36,7 @@
     "npm:preact-render-to-string@^6.5.11": "6.6.1_preact@10.27.2",
     "npm:preact@^10.27.0": "10.27.2",
     "npm:preact@^10.27.2": "10.27.2",
+    "npm:vite@7.1.7": "7.1.7_picomatch@4.0.3",
     "npm:vite@^7.1.7": "7.1.7_picomatch@4.0.3"
   },
   "jsr": {
