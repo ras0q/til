@@ -1,9 +1,12 @@
 #!/bin/sh
-read -p "Enter entry category (alphanumeric/hyphen): " category
-echo "$category" | grep -qE '^[a-zA-Z0-9-]+$' || { echo "Invalid category."; exit 1; }
 
-read -p "Enter entry title (alphanumeric/hyphen): " title
-echo "$title" | grep -qE '^[a-zA-Z0-9-]+$' || { echo "Invalid title."; exit 1; }
+valid_re='^[a-zA-Z0-9-]+$'
+
+read -p "Enter entry category (/$valid_re/): " category
+echo "$category" | grep -qE $valid_re || { echo "Invalid category."; exit 1; }
+
+read -p "Enter entry title (/$valid_re/): " title
+echo "$title" | grep -qE $valid_re || { echo "Invalid title."; exit 1; }
 
 today=$(date +%Y-%m-%d)
 entry_dir="${category}/${today}_${title}"
