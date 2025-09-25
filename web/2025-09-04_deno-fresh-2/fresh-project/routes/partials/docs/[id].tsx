@@ -1,5 +1,5 @@
 import { RouteConfig } from "fresh";
-import { define, loadContent } from "../../../utils.ts";
+import { define } from "../../../utils.ts";
 import { Partial } from "fresh/runtime";
 
 // We only want to render the content, so disable
@@ -11,7 +11,10 @@ export const config: RouteConfig = {
 };
 
 export default define.page(async (ctx) => {
-  const content = await loadContent(ctx.params.id);
+  const apiResponse = await fetch(
+    new URL(`/api/${ctx.params.id}`, ctx.req.url),
+  );
+  const content = await apiResponse.text();
 
   // Only render the new content
   return (
