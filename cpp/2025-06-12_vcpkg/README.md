@@ -5,6 +5,7 @@
 Requirements: `cmake`
 
 ```bash
+git submodule add --depth 1 https://github.com/microsoft/vcpkg.git
 git submodule update --init
 ./vcpkg/bootstrap-vcpkg.sh
 
