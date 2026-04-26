@@ -1,7 +1,8 @@
 # Today I Learned (TIL)
 
-## Index (18 entries, newest first)
+## Index (19 entries, newest first)
 
+- [vlang/2026-04-26_todoapp](./vlang/2026-04-26_todoapp)
 - [go/2025-12-29_manage-vettools](./go/2025-12-29_manage-vettools)
 - [web/2025-09-09_sveltekit-on-deno](./web/2025-09-09_sveltekit-on-deno)
 - [webgl/2025-09-07_wgldorg](./webgl/2025-09-07_wgldorg)
