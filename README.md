@@ -1,7 +1,8 @@
 # Today I Learned (TIL)
 
-## Index (21 entries, newest first)
+## Index (22 entries, newest first)
 
+- [rust/2026-11-27_thus-playground](./rust/2026-11-27_thus-playground)
 - [k8s/2026-11-24_mini-k8s-hands-on](./k8s/2026-11-24_mini-k8s-hands-on)
 - [ddc-ci/2026-10-29_control-light](./ddc-ci/2026-10-29_control-light)
 - [vlang/2026-04-26_todoapp](./vlang/2026-04-26_todoapp)
